@@ -3,11 +3,13 @@
 GameScene::GameScene()
 {
 	// Register and add game objects on constructor
+	player = new PlayerShip();
+	this->addGameObject(player);
 }
 
 GameScene::~GameScene()
 {
-
+	delete player;
 }
 
 void GameScene::start()
