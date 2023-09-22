@@ -72,7 +72,6 @@ void PlayerShip::update()
 		Bullet* bullet = new Bullet(x+width,y-2+height/2,1,0,10);
 		bullets.push_back(bullet);
 		getScene()->addGameObject(bullet);
-		bullet->start();
 		currentReloadTime = reloadTime;
 	}
 	//extra gun
@@ -104,4 +103,14 @@ void PlayerShip::update()
 void PlayerShip::draw()
 {
 	blit(texture, x, y);
+}
+
+int PlayerShip::getPositionX()
+{
+	return x;
+}
+
+int PlayerShip::getPositionY()
+{
+	return y;
 }

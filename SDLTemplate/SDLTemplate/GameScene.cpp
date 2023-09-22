@@ -5,11 +5,17 @@ GameScene::GameScene()
 	// Register and add game objects on constructor
 	player = new PlayerShip();
 	this->addGameObject(player);
+
+	enemy = new Enemy();
+	this->addGameObject(enemy);
+	enemy->getPlayerTarget(player);
+
 }
 
 GameScene::~GameScene()
 {
 	delete player;
+	delete enemy;
 }
 
 void GameScene::start()
