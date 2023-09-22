@@ -19,8 +19,6 @@ void Enemy::start()
 	texture = loadTexture("gfx/enemy.png");
 	directionX = -1;
 	directionY = 1;
-	x = 2500;
-	y = 500;
 	//data initialization
 	width = 0;
 	height = 0;
@@ -93,3 +91,10 @@ void Enemy::getPlayerTarget(PlayerShip* player)
 {
 	playerTarget = player;
 }
+
+void Enemy::setPosition(int xPos, int yPos)
+{
+	this->x = xPos;
+	this->y = yPos;
+}
+

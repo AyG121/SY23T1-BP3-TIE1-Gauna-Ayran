@@ -16,6 +16,7 @@ public:
 	void update();
 	void draw();
 	void getPlayerTarget(PlayerShip* player);
+	void setPosition(int xPos, int yPos);
 private:
 	SDL_Texture* texture;
 	Mix_Chunk* sound;
