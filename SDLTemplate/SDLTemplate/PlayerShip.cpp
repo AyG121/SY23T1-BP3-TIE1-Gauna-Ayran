@@ -25,6 +25,7 @@ void PlayerShip::start()
 	reloadTime = 20;
 	currentReloadTime = 0;
 	secondReloadTime = 0;
+	isAlive = true;
 	//query
 	SDL_QueryTexture(texture, NULL, NULL, &width, &height);
 	sound = SoundManager::loadSound("sound/334227__jradcoolness__laser.ogg" );
@@ -32,7 +33,19 @@ void PlayerShip::start()
 
 void PlayerShip::update()
 {
-	
+	//delete
+	for (int i = 0; i < bullets.size(); i++)
+	{
+		if (bullets[i]->getPositionX() > SCREEN_WIDTH)
+		{
+			Bullet* bulletToErase = bullets[i];
+			bullets.erase(bullets.begin() + i);
+			delete bulletToErase;
+		}
+	}
+
+	if (!isAlive) return;
+
 	if (app.keyboard[SDL_SCANCODE_W])
 	{
 		y -= speed;
@@ -69,7 +82,7 @@ void PlayerShip::update()
 	if (app.keyboard[SDL_SCANCODE_F]&& currentReloadTime==0)
 	{
 		SoundManager::playSound(sound);
-		Bullet* bullet = new Bullet(x+width,y-2+height/2,1,0,10);
+		Bullet* bullet = new Bullet(x+width,y-2+height/2,1,0,10,Side::PLAYER_SIDE);
 		bullets.push_back(bullet);
 		getScene()->addGameObject(bullet);
 		currentReloadTime = reloadTime;
@@ -78,8 +91,8 @@ void PlayerShip::update()
 	if (app.keyboard[SDL_SCANCODE_G] && currentReloadTime == 0)
 	{
 		SoundManager::playSound(sound);
-		Bullet* secondCanon = new Bullet(x-5 + width/2, y-10, 1, 0, 10);
-		Bullet* secondCanon2 = new Bullet(x-5 + width/2, y+40, 1, 0, 10);
+		Bullet* secondCanon = new Bullet(x-5 + width/2, y-10, 1, 0, 10, Side::PLAYER_SIDE);
+		Bullet* secondCanon2 = new Bullet(x-5 + width/2, y+40, 1, 0, 10, Side::PLAYER_SIDE);
 		bullets.push_back(secondCanon);
 		bullets.push_back(secondCanon2);
 		getScene()->addGameObject(secondCanon);
@@ -88,21 +101,16 @@ void PlayerShip::update()
 		secondCanon2->start();
 		currentReloadTime = reloadTime-10;
 	}
-	//delete
-	for (int i = 0; i < bullets.size();i++) 
-	{
-		if (bullets[i]->getPositionX() > SCREEN_WIDTH)
-		{
-			Bullet* bulletToErase = bullets[i];
-			bullets.erase(bullets.begin() + i);
-			delete bulletToErase;
-		}
-	}
+
 }
 
 void PlayerShip::draw()
 {
-	blit(texture, x, y);
+	if (isAlive)
+	{
+		blit(texture, x, y);
+	}
+	
 }
 
 int PlayerShip::getPositionX()
@@ -113,4 +121,24 @@ int PlayerShip::getPositionX()
 int PlayerShip::getPositionY()
 {
 	return y;
+}
+
+int PlayerShip::getWidth()
+{
+	return width;
+}
+
+int PlayerShip::getHeight()
+{
+	return height;
+}
+
+bool PlayerShip::getIsAlive()
+{
+	return isAlive;
+}
+
+void PlayerShip::doDeath()
+{
+	isAlive = false;
 }

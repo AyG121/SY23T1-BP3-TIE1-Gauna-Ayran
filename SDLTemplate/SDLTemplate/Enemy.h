@@ -17,6 +17,13 @@ public:
 	void draw();
 	void getPlayerTarget(PlayerShip* player);
 	void setPosition(int xPos, int yPos);
+	//can do inheritance here
+	int getPositionX();
+	int getPositionY();
+	int getWidth();
+	int getHeight();
+	bool getIsAlive();
+	void doDeath();
 private:
 	SDL_Texture* texture;
 	Mix_Chunk* sound;
@@ -36,5 +43,6 @@ private:
 	float directionChangeTime;
 	float currentDirectionChangeTime;
 	std::vector<Bullet*>bullets;
+	bool isAlive;
 };
 

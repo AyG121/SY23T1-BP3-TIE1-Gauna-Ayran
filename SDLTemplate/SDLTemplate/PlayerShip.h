@@ -12,9 +12,13 @@ public:
 	void start();
 	void update();
 	void draw();
+	//can do inheritance here
 	int getPositionX();
 	int getPositionY();
-
+	int getWidth();
+	int getHeight();
+	bool getIsAlive();
+	void doDeath();
 private:
 	SDL_Texture* texture;
 	Mix_Chunk* sound;
@@ -29,5 +33,6 @@ private:
 	float currentReloadTime;
 	float secondReloadTime;
 	std::vector<Bullet*>bullets;
+	bool isAlive;
 };
 
