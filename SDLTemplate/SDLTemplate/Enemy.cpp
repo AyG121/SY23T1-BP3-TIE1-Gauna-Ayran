@@ -5,12 +5,12 @@ Enemy::Enemy()
 }
 
 Enemy::~Enemy()
-{for (int i = 0; i < bullets.size(); i++)
+{
+	for (int i = 0; i < bullets.size(); i++)
 	{
 		delete bullets[i];
 	}
 	bullets.clear();
-
 }
 
 void Enemy::start()
@@ -50,11 +50,6 @@ void Enemy::update()
 		}
 	}
 
-	if (this->isAlive == false)
-	{
-		texture = loadTexture("gfx/explosion.png");
-	}
-
 	x += directionX * speed;
 	y += directionY * speed;
 
@@ -84,10 +79,10 @@ void Enemy::update()
 		currentReloadTime = reloadTime;
 	}
 
-	//if (this->x < 0)
-	//{
-		//delete this;
-	//}
+	if (this->x < 0)
+	{
+		delete this;
+	}
 
 }
 

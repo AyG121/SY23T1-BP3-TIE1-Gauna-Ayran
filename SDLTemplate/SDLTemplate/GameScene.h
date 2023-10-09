@@ -5,6 +5,8 @@
 #include"Enemy.h"
 #include<vector>
 #include"text.h"
+#include"Background.h"
+#include"Explosion.h"
 class GameScene : public Scene
 {
 public:
@@ -16,6 +18,8 @@ public:
 private:
 	PlayerShip* player;
 	Enemy* enemy;
+	Background* background;
+	Explosion* explode;
 
 	//enemy spawner
 	float spawnTime;
@@ -26,7 +30,6 @@ private:
 	void doCollisionCheck();
 	void spawner();
 	void despawnEnemy(Enemy* enemy);
-
 	int points;
 };
 

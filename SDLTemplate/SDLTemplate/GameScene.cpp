@@ -3,6 +3,8 @@
 GameScene::GameScene()
 {
 	// Register and add game objects on constructor
+	background = new Background();
+	this->addGameObject(background);
 	player = new PlayerShip();
 	this->addGameObject(player);
 
@@ -22,12 +24,12 @@ void GameScene::start()
 	initFonts();
 	currentSpawnTimer = 300;
 	spawnTime = 300;
-
+	
 	for (int i = 0; i < 3; i++)
 	{
 		spawner();
 	}
-
+	
 }
 
 void GameScene::draw()
@@ -46,7 +48,7 @@ void GameScene::update()
 {
 	Scene::update();
 	doCollisionCheck();
-	doCollisionCheck();
+	doSpawnCheck();
 }
 
 void GameScene::doSpawnCheck()
@@ -91,6 +93,7 @@ void GameScene::doCollisionCheck()
 			//player bullet
 			else if (bullet->getSide() == Side::PLAYER_SIDE)
 			{
+
 				for (int i = 0; i < spawnedEnemy.size(); i++)
 				{
 					Enemy* currentEnemy = spawnedEnemy[i];
@@ -99,11 +102,18 @@ void GameScene::doCollisionCheck()
 					int collision = checkCollision(
 						currentEnemy->getPositionX(), currentEnemy->getPositionY(), currentEnemy->getWidth(), currentEnemy->getHeight(),
 						bullet->getPositionX(), bullet->getPositionY(), bullet->getWidth(), bullet->getHeight()
+
 					);
 					if (collision == 1)
 					{
-						despawnEnemy(currentEnemy);
+						Explosion* explode = new Explosion();
+
+						this->addGameObject(explode);
+						explode->getEnemyLocation(currentEnemy);
+						explode->setPosition(currentEnemy->getPositionX(), currentEnemy->getPositionY());
+						
 						currentEnemy->doDeath();
+						despawnEnemy(currentEnemy);
 						points++;
 						break;
 					}
@@ -121,7 +131,6 @@ void GameScene::spawner()
 	enemy->setPosition(1200, 300 + (rand() % 300));
 	spawnedEnemy.push_back(enemy);
 
-	
 }
 
 void GameScene::despawnEnemy(Enemy* enemy)
@@ -136,9 +145,9 @@ void GameScene::despawnEnemy(Enemy* enemy)
 			break;
 		}
 	}
-		if (index != 1)
-		{
-			spawnedEnemy.erase(spawnedEnemy.begin() + index);
-			delete enemy;
-		}
+	if (index != -1)
+	{
+		spawnedEnemy.erase(spawnedEnemy.begin() + index);
+		delete enemy;
+	}
 }
