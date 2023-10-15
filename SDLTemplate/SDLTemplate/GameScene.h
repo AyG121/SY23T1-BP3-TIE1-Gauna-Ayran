@@ -7,6 +7,7 @@
 #include"text.h"
 #include"Background.h"
 #include"Explosion.h"
+#include"PowerUps.h"
 class GameScene : public Scene
 {
 public:
@@ -20,7 +21,7 @@ private:
 	Enemy* enemy;
 	Background* background;
 	Explosion* explode;
-
+	PowerUps* powerUp;
 	//enemy spawner
 	float spawnTime;
 	float currentSpawnTimer;

@@ -30,6 +30,7 @@
     <ClCompile Include="input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="PlayerShip.cpp" />
+    <ClCompile Include="PowerUps.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="text.cpp" />
@@ -50,6 +51,7 @@
     <ClInclude Include="input.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="PlayerShip.h" />
+    <ClInclude Include="PowerUps.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="text.h" />

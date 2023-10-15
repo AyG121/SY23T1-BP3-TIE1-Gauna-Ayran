@@ -5,37 +5,35 @@
 #include"SoundManager.h"
 #include"bullet.h"
 #include <vector>
-
-class PlayerShip:public GameObject
+#include"util.h"
+#include "PlayerShip.h"
+class PowerUps : public GameObject
 {
 public:
-	~PlayerShip();
+	~PowerUps();
 	void start();
 	void update();
 	void draw();
 	//can do inheritance here
-	int getPositionX();
-	int getPositionY();
 	int getWidth();
 	int getHeight();
-	void usePowerUp();
-	bool getIsAlive();
-	void doDeath();
+	int getPositionX();
+	int getPositionY();
+	bool getIsThere();
+	void doRemove();//check if shot
 private:
 	SDL_Texture* texture;
 	Mix_Chunk* sound;
+	//PlayerShip* playerTarget;
 	int x;
 	int y;
+	float directionX;
+	float directionY;
 	int width;
 	int height;
 	int speed;
-	int accelerate;
-	int slowDown;
-	float reloadTime;
-	float currentReloadTime;
-	float secondReloadTime;
-	std::vector<Bullet*>bullets;
-	bool isAlive;
-	bool powerUpCheck;
+	float directionChangeTime;
+	float currentDirectionChangeTime;
+	bool isThere;
 };
 

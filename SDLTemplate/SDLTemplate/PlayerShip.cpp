@@ -1,6 +1,7 @@
 #include "PlayerShip.h"
 #include "draw.h"
 #include "Scene.h"
+#include "PowerUps.h"
 PlayerShip::~PlayerShip()
 {
 	for (int i = 0; i < bullets.size(); i++)
@@ -15,8 +16,8 @@ void PlayerShip::start()
 	texture = loadTexture("gfx/player.png");
 
 	//data initialization
-	x = 0;
-	y = 0;
+	x = 350;
+	y = 550;
 	width = 0;
 	height = 0;
 	speed = 2;
@@ -26,6 +27,7 @@ void PlayerShip::start()
 	currentReloadTime = 0;
 	secondReloadTime = 0;
 	isAlive = true;
+	powerUpCheck = false;
 	//query
 	SDL_QueryTexture(texture, NULL, NULL, &width, &height);
 	sound = SoundManager::loadSound("sound/334227__jradcoolness__laser.ogg" );
@@ -78,27 +80,42 @@ void PlayerShip::update()
 	if (currentReloadTime > 0)
 		currentReloadTime--;
 
-	//fire sound
-	if (app.keyboard[SDL_SCANCODE_F]&& currentReloadTime==0)
+	
+	if (powerUpCheck==true)
 	{
-		SoundManager::playSound(sound);
-		Bullet* bullet = new Bullet(x+width,y-2+height/2,1,0,10,Side::PLAYER_SIDE);
-		bullets.push_back(bullet);
-		getScene()->addGameObject(bullet);
-		currentReloadTime = reloadTime;
+		if (app.keyboard[SDL_SCANCODE_F] && currentReloadTime == 0)
+		{
+			SoundManager::playSound(sound);
+			Bullet* powerBullet = new Bullet(5+(x - 3 + width / 2), y - 25 + height / 2, 0, -1, 10, Side::PLAYER_SIDE);
+			Bullet* powerBullet2 = new Bullet(-5+(x - 3 + width / 2), y - 25 + height / 2, 0, -1, 10, Side::PLAYER_SIDE);
+			bullets.push_back(powerBullet);
+			bullets.push_back(powerBullet2);
+			getScene()->addGameObject(powerBullet);
+			getScene()->addGameObject(powerBullet2);
+			currentReloadTime = reloadTime - 5;
+		}
+	}
+	else
+	{
+		if (app.keyboard[SDL_SCANCODE_F] && currentReloadTime == 0)
+		{
+			SoundManager::playSound(sound);
+			Bullet* bullet = new Bullet(x - 3 + width / 2, y - 25 + height / 2, 0, -1, 10, Side::PLAYER_SIDE);
+			bullets.push_back(bullet);
+			getScene()->addGameObject(bullet);
+			currentReloadTime = reloadTime;
+		}
 	}
 	//extra gun
 	if (app.keyboard[SDL_SCANCODE_G] && currentReloadTime == 0)
 	{
 		SoundManager::playSound(sound);
-		Bullet* secondCanon = new Bullet(x-5 + width/2, y-10, 1, 0, 10, Side::PLAYER_SIDE);
-		Bullet* secondCanon2 = new Bullet(x-5 + width/2, y+40, 1, 0, 10, Side::PLAYER_SIDE);
+		Bullet* secondCanon = new Bullet(15 +(x-3 + width / 2), y + height / 2, 0, -1, 10, Side::PLAYER_SIDE);
+		Bullet* secondCanon2 = new Bullet(-15 +(x-3 + width / 2), y + height / 2, 0, -1, 10, Side::PLAYER_SIDE);
 		bullets.push_back(secondCanon);
 		bullets.push_back(secondCanon2);
 		getScene()->addGameObject(secondCanon);
 		getScene()->addGameObject(secondCanon2);
-		secondCanon->start();
-		secondCanon2->start();
 		currentReloadTime = reloadTime-10;
 	}
 
@@ -133,6 +150,17 @@ int PlayerShip::getHeight()
 	return height;
 }
 
+void PlayerShip::usePowerUp()
+{
+	//and add skill then remove skill after awhile
+	powerUpCheck = true;
+	//grab collided check power up state if taken or not taken
+	//have condition when press f and the powerup state = collided
+	//it shoot 2 bollet
+	//cooldown/time thing
+
+}
+
 bool PlayerShip::getIsAlive()
 {
 	return isAlive;
@@ -142,3 +170,5 @@ void PlayerShip::doDeath()
 {
 	isAlive = false;
 }
+
+

@@ -5,9 +5,12 @@ GameScene::GameScene()
 	// Register and add game objects on constructor
 	background = new Background();
 	this->addGameObject(background);
+	//player
 	player = new PlayerShip();
 	this->addGameObject(player);
-
+	//power up
+	powerUp = new PowerUps();
+	this->addGameObject(powerUp);
 	points = 0;
 }
 
@@ -72,7 +75,7 @@ void GameScene::doCollisionCheck()
 	for (int i = 0; i < objects.size(); i++)
 	{
 		Bullet* bullet = dynamic_cast <Bullet*>(objects[i]);
-
+		PowerUps* powerUp = dynamic_cast<PowerUps*>(objects[i]);
 		//cast success check
 		if (bullet != NULL)
 		{
@@ -120,6 +123,18 @@ void GameScene::doCollisionCheck()
 				}
 			}
 		}
+		if (powerUp != NULL)
+		{
+			int collision = checkCollision(
+				powerUp->getPositionX(), powerUp->getPositionY(), powerUp->getWidth(), powerUp->getHeight(),
+				player->getPositionX(), player->getPositionY(), player->getWidth(), player->getHeight()
+			);
+			if (collision == 1)
+			{
+				player->usePowerUp();
+				powerUp->doRemove();
+			}
+		}
 	}
 }
 
@@ -128,7 +143,7 @@ void GameScene::spawner()
 	Enemy* enemy = new Enemy();
 	this->addGameObject(enemy);
 	enemy->getPlayerTarget(player);
-	enemy->setPosition(1200, 300 + (rand() % 300));
+	enemy->setPosition(300 + (rand() % 300),0 );
 	spawnedEnemy.push_back(enemy);
 
 }

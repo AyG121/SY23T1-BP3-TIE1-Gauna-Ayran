@@ -23,11 +23,9 @@ void Enemy::start()
 	width = 0;
 	height = 0;
 	speed = 2;
-	accelerate = 5;
-	slowDown -= accelerate;
 	reloadTime = 60;
 	currentReloadTime = 0;
-	directionChangeTime = (rand() % 300) + 180;
+	directionChangeTime = (rand() % 10) + 50;
 	currentDirectionChangeTime = 0;
 	this->isAlive = true;
 	
@@ -58,7 +56,7 @@ void Enemy::update()
 
 	if (currentDirectionChangeTime == 0)
 	{
-		directionY = -directionY;
+		directionX = -directionX;
 		currentDirectionChangeTime = directionChangeTime;
 	}
 
