@@ -20,7 +20,7 @@ void PlayerShip::start()
 	y = 550;
 	width = 0;
 	height = 0;
-	speed = 2;
+	speed = 4;
 	accelerate = 5;
 	slowDown -= accelerate;
 	reloadTime = 20;

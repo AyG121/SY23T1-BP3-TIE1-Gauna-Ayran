@@ -22,17 +22,17 @@ void Enemy::start()
 	//data initialization
 	width = 0;
 	height = 0;
-	speed = 2;
-	reloadTime = 60;
+	speed = 1;
+	reloadTime = 45;
 	currentReloadTime = 0;
-	directionChangeTime = (rand() % 10) + 50;
+	directionChangeTime = (rand() % 30)  +60;
 	currentDirectionChangeTime = 0;
 	this->isAlive = true;
 	
 	//query
 	SDL_QueryTexture(texture, NULL, NULL, &width, &height);
 	sound = SoundManager::loadSound("sound/334227__jradcoolness__laser.ogg");
-	sound->volume = 64;
+	sound->volume = 20;
 }
 
 void Enemy::update()
@@ -40,7 +40,7 @@ void Enemy::update()
 	//delete
 	for (int i = 0; i < bullets.size(); i++)
 	{
-		if (bullets[i]->getPositionX() < 0)
+		if (bullets[i]->getPositionY() > SCREEN_HEIGHT)
 		{
 			Bullet* bulletToErase = bullets[i];
 			bullets.erase(bullets.begin() + i);
@@ -65,7 +65,7 @@ void Enemy::update()
 	//fire sound
 	if (currentReloadTime == 0)
 	{
-		float dx=-1;
+		float dx= -1;
 		float dy = 0;
 
 		calcSlope(playerTarget->getPositionX(), playerTarget->getPositionY(),x,y,&dx,&dy);
@@ -77,7 +77,7 @@ void Enemy::update()
 		currentReloadTime = reloadTime;
 	}
 
-	if (this->x < 0)
+	if (this->y > SCREEN_HEIGHT)
 	{
 		delete this;
 	}

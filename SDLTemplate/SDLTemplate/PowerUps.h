@@ -19,6 +19,7 @@ public:
 	int getHeight();
 	int getPositionX();
 	int getPositionY();
+	void setPosition(int xPos, int yPos);
 	bool getIsThere();
 	void doRemove();//check if shot
 private:

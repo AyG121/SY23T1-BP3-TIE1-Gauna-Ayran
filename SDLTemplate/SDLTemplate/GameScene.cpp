@@ -8,10 +8,9 @@ GameScene::GameScene()
 	//player
 	player = new PlayerShip();
 	this->addGameObject(player);
-	//power up
-	powerUp = new PowerUps();
-	this->addGameObject(powerUp);
+
 	points = 0;
+	bossHp = 30;
 }
 
 GameScene::~GameScene()
@@ -25,8 +24,11 @@ void GameScene::start()
 	Scene::start();
 	// Initialize any scene logic here
 	initFonts();
-	currentSpawnTimer = 300;
-	spawnTime = 300;
+	currentSpawnTimer = 200;
+	spawnTime = 200;
+	//20s to spawn boss
+	bossSpawnTime=1000;
+	currentBossSpawnTimer=1000;
 	
 	for (int i = 0; i < 3; i++)
 	{
@@ -56,17 +58,32 @@ void GameScene::update()
 
 void GameScene::doSpawnCheck()
 {
-
 	if (currentSpawnTimer > 0)
 		currentSpawnTimer--;
-	if (currentSpawnTimer <= 0)
+	if (currentSpawnTimer <= 0 && bossFight == false)
 	{
 		for (int i = 0; i < 3; i++)
 		{
 			spawner();
 			currentSpawnTimer = spawnTime;
 		}
+		powerUpSpawn();
 	}
+
+	if (currentBossSpawnTimer > 0)
+		currentBossSpawnTimer--;
+	if (currentBossSpawnTimer <= 0) 
+	{
+		for (int i = 0; i < 1; i++)
+		{
+			bossFight = true;
+			createBoss();
+			bossHp++;
+			currentBossSpawnTimer = bossSpawnTime;
+			break;
+		}
+	}
+	
 }
 
 void GameScene::doCollisionCheck()
@@ -76,6 +93,7 @@ void GameScene::doCollisionCheck()
 	{
 		Bullet* bullet = dynamic_cast <Bullet*>(objects[i]);
 		PowerUps* powerUp = dynamic_cast<PowerUps*>(objects[i]);
+		Boss* boss = dynamic_cast<Boss*>(objects[i]);
 		//cast success check
 		if (bullet != NULL)
 		{
@@ -114,15 +132,47 @@ void GameScene::doCollisionCheck()
 						this->addGameObject(explode);
 						explode->getEnemyLocation(currentEnemy);
 						explode->setPosition(currentEnemy->getPositionX(), currentEnemy->getPositionY());
-						
-						currentEnemy->doDeath();
+
 						despawnEnemy(currentEnemy);
+						points++;
+						break;
+					}
+
+				}
+				for (int i = 0; i < spawnedBoss.size(); i++)
+				{
+					Boss* currentBoss = spawnedBoss[i];
+
+
+					int collision = checkCollision(
+						currentBoss->getPositionX(), currentBoss->getPositionY(), currentBoss->getWidth(), currentBoss->getHeight(),
+						bullet->getPositionX(), bullet->getPositionY(), bullet->getWidth(), bullet->getHeight()
+
+					);
+					if (collision == 1)
+					{
+						/*
+						Explosion* explode = new Explosion();
+
+						this->addGameObject(explode);
+						explode->getBossLocation(currentBoss);
+						explode->setPosition(currentBoss->getPositionX(), currentBoss->getPositionY());
+						*/
+						bossHp--;
+
+						if (bossHp <= 0)
+						{
+						despawnBoss(currentBoss);
+						bossFight = false;
+						break;
+						}
 						points++;
 						break;
 					}
 				}
 			}
 		}
+
 		if (powerUp != NULL)
 		{
 			int collision = checkCollision(
@@ -132,9 +182,11 @@ void GameScene::doCollisionCheck()
 			if (collision == 1)
 			{
 				player->usePowerUp();
-				powerUp->doRemove();
+				powerUp->doRemove();//doesn't respawn and delete
+				delete powerUp;
 			}
 		}
+		
 	}
 }
 
@@ -143,9 +195,16 @@ void GameScene::spawner()
 	Enemy* enemy = new Enemy();
 	this->addGameObject(enemy);
 	enemy->getPlayerTarget(player);
-	enemy->setPosition(300 + (rand() % 300),0 );
+	enemy->setPosition(300 + (rand() % 300),30 );
 	spawnedEnemy.push_back(enemy);
+}
 
+void GameScene::powerUpSpawn()
+{
+	//power up
+	powerUp = new PowerUps();
+	this->addGameObject(powerUp);
+	powerUp->setPosition(200 + (rand() % 200), 0);
 }
 
 void GameScene::despawnEnemy(Enemy* enemy)
@@ -164,5 +223,34 @@ void GameScene::despawnEnemy(Enemy* enemy)
 	{
 		spawnedEnemy.erase(spawnedEnemy.begin() + index);
 		delete enemy;
+	}
+}
+
+void GameScene::createBoss()
+{
+	//boss
+	Boss* boss = new Boss();
+	this->addGameObject(boss);
+	boss->getPlayerTarget(player);
+	boss->setPosition(300, 300);
+	spawnedBoss.push_back(boss);
+}
+
+void GameScene::despawnBoss(Boss* boss)
+{
+	int index = -1;
+	for (int i = 0; i < spawnedBoss.size(); i++)
+	{
+		//pointer match
+		if (boss == spawnedBoss[i])
+		{
+			index = i;
+			break;
+		}
+	}
+	if (index != -1)
+	{
+		spawnedBoss.erase(spawnedBoss.begin() + index);
+		delete boss;
 	}
 }

@@ -36,6 +36,11 @@ void Explosion::getEnemyLocation(Enemy* mEnemyLocation)
 	enemyLocation = mEnemyLocation;
 }
 
+void Explosion::getBossLocation(Boss* mBossLocation)
+{
+	bossLocation = mBossLocation;
+}
+
 void Explosion::setPosition(int xPos, int yPos)
 {
 	this->x = xPos;
@@ -61,6 +66,5 @@ void Explosion::despawnExplosion()
 	//check the ong spawned
 		currentSpawnTimer = spawnTime;
 		delete this;
-		
 	}
 }

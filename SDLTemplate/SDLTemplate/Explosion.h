@@ -8,6 +8,8 @@
 #include <vector>
 #include"util.h"
 #include "Enemy.h"
+#include "Boss.h"
+
 class Explosion : public GameObject
 {
 public:
@@ -18,12 +20,14 @@ public:
 	void despawnExplosion();
 	//trying to spawn on enemy's position
 	void getEnemyLocation(Enemy* mEnemyLocation);
+	void getBossLocation(Boss* mBossLocation);
 	void setPosition(int xPos, int yPos);
 	int getPositionX();
 	int getPositionY();
 private:
 	SDL_Texture* texture;
 	Enemy* enemyLocation;
+	Boss* bossLocation;
 	int x;
 	int y;
 	int width;

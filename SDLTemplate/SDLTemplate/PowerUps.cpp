@@ -15,7 +15,7 @@ void PowerUps::start()
 	width = 0;
 	height = 0;
 	speed = 2;
-	directionChangeTime = (rand() % 30) + 70;
+	directionChangeTime = (rand() % 35) + 80;
 	currentDirectionChangeTime = 0;
 	this->isThere = true;
 	//query
@@ -68,6 +68,12 @@ int PowerUps::getPositionX()
 int PowerUps::getPositionY()
 {
 	return y;
+}
+
+void PowerUps::setPosition(int xPos, int yPos)
+{
+	this->x = xPos;
+	this->y = yPos;
 }
 
 bool PowerUps::getIsThere()

@@ -8,6 +8,7 @@
 #include"Background.h"
 #include"Explosion.h"
 #include"PowerUps.h"
+#include"Boss.h"
 class GameScene : public Scene
 {
 public:
@@ -22,6 +23,7 @@ private:
 	Background* background;
 	Explosion* explode;
 	PowerUps* powerUp;
+	Boss* boss;
 	//enemy spawner
 	float spawnTime;
 	float currentSpawnTimer;
@@ -30,7 +32,16 @@ private:
 	void doSpawnCheck();
 	void doCollisionCheck();
 	void spawner();
+	void powerUpSpawn();
 	void despawnEnemy(Enemy* enemy);
 	int points;
+	//boss spawner functions
+	float bossSpawnTime;
+	float currentBossSpawnTimer;
+	void createBoss();
+	void despawnBoss(Boss* boss);
+	std::vector<Boss*> spawnedBoss;
+	int bossHp;
+	bool bossFight;
 };
 
